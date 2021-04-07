@@ -9,7 +9,7 @@ from .views import *
 urlpatterns = [
     path('', index, name="home"),
     path("admin/", admin.site.urls),
-    path('load_data', load_data, name='index'),
+    path('api/load-data', load_data, name='index'),
     path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))), #second argument could be scheme=scheme
     path('api/customer-history', CustomerHistory.as_view(),name='customer-history')
 ]

@@ -1,0 +1,15 @@
+Luego de ubicarse en este directorio correr
+python -m manage makemigrations
+python -m manage migrate
+
+python -m manage createsuperuse #crear superusuario
+
+python -m manage runserver 9000 #correr servidor
+
+
+#Endpoints
+localhost:9000/api/load-data #cargar datos
+#Opcionalmente en el body enviar key=date con el valor de la fecha en unix timestamp
+
+localhost:9000/api/customer-history #consultar historial de usuario, otros usuarios usando la misma ip y recomendacion de producto 
+#El body debe contaner un key=buyer con value igual al id del customer que se quiere consultar
