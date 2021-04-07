@@ -67,35 +67,33 @@ def load_data(request):
         data = {}
         data['body'] = {"date":unix_timestamp}
         # Q1
-        # q = 'https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/buyers'
-        # res = requests.get(q, json=data)
-        # json_res = json.loads(res.text)
-        # print(json_res)
-        # serializer = BuyerSerializer(data=json_res[:], many=True)
-        # if serializer.is_valid():
-        #     serializer.save()
-        # print(serializer.errors())
-        # Q2
-        # q2 = 'https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/products'
-        # res = requests.get(q2, json=data)
+        q = 'https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/buyers'
+        res = requests.get(q, json=data)
+        json_res = json.loads(res.text)
+        serializer = BuyerSerializer(data=json_res[:], many=True)
+        if serializer.is_valid():
+            serializer.save()
         
-        # my_res = str(f"{res.text}")
-        # my_res_list = [re.split("\'",x) for x in my_res.split("\n")]
-        # temp_list = list()
-        # p = re.compile('[0-9]+')
-        # for i in range(len(my_res_list)-1):
-        #     if len(my_res_list[i])!=0:
-        #         if p.match(my_res_list[i][2])!=None:
-        #             product_id = str(my_res_list[i][0])
-        #             name = str(my_res_list[i][1])
-        #             price = int(my_res_list[i][2])
-        #             product_dict = {'product':product_id, 'name':name, 'price':price}
-        #             temp_list.append(product_dict)
+        # Q2
+        q2 = 'https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/products'
+        res = requests.get(q2, json=data)
+        
+        my_res = str(f"{res.text}")
+        my_res_list = [re.split("\'",x) for x in my_res.split("\n")]
+        temp_list = list()
+        p = re.compile('[0-9]+')
+        for i in range(len(my_res_list)-1):
+            if len(my_res_list[i])!=0:
+                if p.match(my_res_list[i][2])!=None:
+                    product_id = str(my_res_list[i][0])
+                    name = str(my_res_list[i][1])
+                    price = int(my_res_list[i][2])
+                    product_dict = {'product':product_id, 'name':name, 'price':price}
+                    temp_list.append(product_dict)
                 
-        # serializer = ProductSerializer(data=temp_list[:-1], many=True)
-        # if serializer.is_valid():
-        #     serializer.save()
-        # print(serializer.errors)
+        serializer = ProductSerializer(data=temp_list[:-1], many=True)
+        if serializer.is_valid():
+            serializer.save()
 
         # Q3 
         q3 = 'https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/transactions'
@@ -112,8 +110,7 @@ def load_data(request):
                                     'ip': my_res_list[i+2],'device':my_res_list[i+3],
                                     'product': Product.objects.filter(product=product_id)[0].pk}
                         transactions.append(transaction)
-        
-        # print(transactions[0:5])
+
         transaction_serializer = TransactionSerializer(data=transactions, many=True)
         
         if transaction_serializer.is_valid():
